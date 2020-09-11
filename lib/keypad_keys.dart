@@ -29,7 +29,7 @@ extension Codec on Keypad {
       case Keypad.five:
         return 5;
       case Keypad.six:
-        return 7;
+        return 6;
       case Keypad.seven:
         return 7;
       case Keypad.eight:
