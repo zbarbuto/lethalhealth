@@ -10000,7 +10000,7 @@ case C.o3:return 2
 case C.o5:return 3
 case C.o6:return 4
 case C.o7:return 5
-case C.o8:return 7
+case C.o8:return 6
 case C.o9:return 7
 case C.oa:return 8
 case C.ob:return 9
