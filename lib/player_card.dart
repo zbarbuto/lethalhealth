@@ -10,9 +10,14 @@ import 'health_mode.dart';
 class PlayerCard extends StatelessWidget {
   final Player player;
   final Function updatePlayers;
+  final Function onSettings;
   final bool inverted;
 
-  PlayerCard({this.player, this.updatePlayers, this.inverted = false});
+  PlayerCard(
+      {this.player,
+      this.updatePlayers,
+      this.onSettings,
+      this.inverted = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,7 @@ class PlayerCard extends StatelessWidget {
             health: player.health,
             color: player.color)
         : HealthManager(
+            onSettings: onSettings,
             onHealth: (HealthMode mode) {
               player.healthMode = mode;
               updatePlayers();

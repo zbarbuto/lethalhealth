@@ -7,12 +7,14 @@ class HealthManager extends StatelessWidget {
   final bool hasCoin;
   final Function onHealth;
   final Function onCoin;
+  final Function onSettings;
 
   HealthManager(
       {this.health = 0,
       this.hasCoin,
       this.color = Colors.cyan,
       this.onHealth,
+      this.onSettings,
       this.onCoin});
 
   @override
@@ -67,6 +69,13 @@ class HealthManager extends StatelessWidget {
                 },
                 backgroundColor: Colors.red.shade900,
                 child: Icon(Icons.remove),
+              ),
+              FloatingActionButton(
+                backgroundColor: Colors.blueGrey.shade300,
+                child: Icon(Icons.settings),
+                onPressed: () {
+                  onSettings();
+                },
               ),
               FloatingActionButton(
                 onPressed: () {

@@ -4,7 +4,8 @@ import 'health_mode.dart';
 
 class Player {
   HealthMode healthMode = HealthMode.none;
-  int health = 30;
+  int startHealth;
+  int health;
   bool hasCoin = true;
   Color color;
 
@@ -12,5 +13,5 @@ class Player {
     return healthMode != HealthMode.none;
   }
 
-  Player({this.color});
+  Player({this.color, this.startHealth = 30}) : this.health = startHealth;
 }
