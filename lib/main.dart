@@ -147,40 +147,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         .toList()),
               ),
               Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Transform.rotate(
-                      angle: players.indexOf(turnPlayer) == 0 ? 0 : pi,
-                      child: SizedBox(
-                        width: 150,
-                        height: 250,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(Icons.arrow_upward, size: 150)),
-                      ),
-                    ),
-                    RaisedButton(
-                        onPressed: () {
-                          players.forEach((player) {
-                            player.hasCoin = true;
-                            _updatePlayers();
-                          });
-                          setState(() {
-                            turnPlayer = players.indexOf(turnPlayer) == 0
-                                ? players[1]
-                                : players[0];
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 18.0),
-                          child: Text(
-                            'Turn',
-                            style: TextStyle(fontSize: 28),
-                          ),
-                        )),
-                  ],
+                child: CenterContent(
+                  onTurn: () {
+                    players.forEach((player) {
+                      player.hasCoin = true;
+                      _updatePlayers();
+                    });
+                    setState(() {
+                      turnPlayer = players.indexOf(turnPlayer) == 0
+                          ? players[1]
+                          : players[0];
+                    });
+                  },
+                  players: players,
+                  turnPlayer: turnPlayer,
                 ),
               )
             ],
@@ -229,4 +209,75 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
+class CenterContent extends StatefulWidget {
+  List<Player> players;
+  Player turnPlayer;
+  Function onTurn;
+
+  CenterContent({this.players, this.turnPlayer, this.onTurn});
+
+  @override
+  _CenterContentState createState() => _CenterContentState();
+}
+
+class _CenterContentState extends State<CenterContent>
+    with SingleTickerProviderStateMixin {
+  final Tween<double> turnsTween = Tween<double>(
+    begin: 0,
+    end: 0.5,
+  );
+
+  AnimationController _controller;
+
+  initState() {
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(CenterContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget.players.indexOf(widget.turnPlayer) == 0
+        ? _controller.forward()
+        : _controller.reverse();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            RotationTransition(
+              turns: turnsTween.animate(_controller),
+              child: SizedBox(
+                width: 150,
+                height: 250,
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(Icons.arrow_upward, size: 150)),
+              ),
+            ),
+            RaisedButton(
+                onPressed: () {
+                  widget.onTurn();
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 18.0),
+                  child: Text(
+                    'Turn',
+                    style: TextStyle(fontSize: 28),
+                  ),
+                )),
+          ],
+        )
+      ],
+    );
+  }
 }
