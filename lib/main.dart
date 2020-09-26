@@ -262,10 +262,10 @@ class _CenterContentState extends State<CenterContent>
                     ),
                 child: SizedBox(
                   width: 100,
-                  height: 160,
+                  height: 200,
                   child: Align(
                       alignment: Alignment.topRight,
-                      child: Icon(Icons.arrow_upward, size: 100)),
+                      child: Icon(Icons.arrow_drop_up, size: 100)),
                 ),
               ),
             ),
@@ -275,7 +275,7 @@ class _CenterContentState extends State<CenterContent>
                 },
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 18.0),
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 18.0),
                   child: Text(
                     'Turn',
                     style: TextStyle(fontSize: 28),
