@@ -39,37 +39,39 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     //
-    return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-                children: players
-                    .map((player) => PlayerCard(
-                          inverted: players.indexOf(player) == 0,
-                          player: player,
-                          updatePlayers: _updatePlayers,
-                        ))
-                    .toList()),
-          ),
-          Center(
-            child: RaisedButton(
-                onPressed: () {
-                  players.forEach((player) {
-                    player.hasCoin = true;
-                    _updatePlayers();
-                  });
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 18.0),
-                  child: Text(
-                    'Turn',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                )),
-          )
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Center(
+              child: Column(
+                  children: players
+                      .map((player) => PlayerCard(
+                            inverted: players.indexOf(player) == 0,
+                            player: player,
+                            updatePlayers: _updatePlayers,
+                          ))
+                      .toList()),
+            ),
+            Center(
+              child: RaisedButton(
+                  onPressed: () {
+                    players.forEach((player) {
+                      player.hasCoin = true;
+                      _updatePlayers();
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4, horizontal: 18.0),
+                    child: Text(
+                      'Turn',
+                      style: TextStyle(fontSize: 28),
+                    ),
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }
