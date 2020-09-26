@@ -24,11 +24,37 @@ class HealthManager extends StatelessWidget {
         children: [
           Expanded(
             child: Center(
-              child: Container(
-                child: Text(
-                  this.health.toString(),
-                  style: TextStyle(fontSize: 42),
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          onCoin();
+                        },
+
+                        backgroundColor: hasCoin
+                            ? Colors.yellow.shade300
+                            : Colors.grey.shade300,
+                        foregroundColor: Colors.black,
+                        // child: hasCoin
+                        //     ? Icon(Icons.monetization_on_outlined)
+                        //     : Icon(Icons.money_off_outlined),
+                      ),
+                    ),
+                  ),
+                  IgnorePointer(
+                    child: Container(
+                      child: Text(
+                        this.health.toString(),
+                        style: TextStyle(fontSize: 42),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -41,17 +67,6 @@ class HealthManager extends StatelessWidget {
                 },
                 backgroundColor: Colors.red.shade900,
                 child: Icon(Icons.remove),
-              ),
-              FloatingActionButton(
-                onPressed: () {
-                  onCoin();
-                },
-                backgroundColor:
-                    hasCoin ? Colors.yellow.shade300 : Colors.grey.shade300,
-                foregroundColor: Colors.black,
-                child: hasCoin
-                    ? Icon(Icons.monetization_on_outlined)
-                    : Icon(Icons.money_off_outlined),
               ),
               FloatingActionButton(
                 onPressed: () {
