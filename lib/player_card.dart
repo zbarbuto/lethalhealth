@@ -47,7 +47,12 @@ class PlayerCard extends StatelessWidget {
             health: player.health,
           );
     return Expanded(
-        child:
-            inverted ? Transform.rotate(angle: pi, child: content) : content);
+        child: Container(
+      color: player.color,
+      child: Padding(
+          padding: EdgeInsets.all(24),
+          child:
+              inverted ? Transform.rotate(angle: pi, child: content) : content),
+    ));
   }
 }
