@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   Player contextPlayer;
+  Player turnPlayer;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: players
                         .map((player) => PlayerCard(
                               onSettings: () {
-                                contextPlayer = player;
+                                setState(() {
+                                  contextPlayer = player;
+                                });
                                 Scaffold.of(context).openDrawer();
                               },
                               inverted: players.indexOf(player) == 0,
@@ -144,21 +147,41 @@ class _MyHomePageState extends State<MyHomePage> {
                         .toList()),
               ),
               Center(
-                child: RaisedButton(
-                    onPressed: () {
-                      players.forEach((player) {
-                        player.hasCoin = true;
-                        _updatePlayers();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 18.0),
-                      child: Text(
-                        'Turn',
-                        style: TextStyle(fontSize: 28),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Transform.rotate(
+                      angle: players.indexOf(turnPlayer) == 0 ? 0 : pi,
+                      child: SizedBox(
+                        width: 150,
+                        height: 250,
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(Icons.arrow_upward, size: 150)),
                       ),
-                    )),
+                    ),
+                    RaisedButton(
+                        onPressed: () {
+                          players.forEach((player) {
+                            player.hasCoin = true;
+                            _updatePlayers();
+                          });
+                          setState(() {
+                            turnPlayer = players.indexOf(turnPlayer) == 0
+                                ? players[1]
+                                : players[0];
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 18.0),
+                          child: Text(
+                            'Turn',
+                            style: TextStyle(fontSize: 28),
+                          ),
+                        )),
+                  ],
+                ),
               )
             ],
           ),
