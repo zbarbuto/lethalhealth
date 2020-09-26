@@ -9,12 +9,12 @@ const RESOURCES = {
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
 "assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25",
 "assets/AssetManifest.json": "2efbb41d7877d10aac9d091f58ccd7b9",
-"favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"index.html": "6705a5c644e8214e130813454c68f994",
-"/": "6705a5c644e8214e130813454c68f994",
-"manifest.json": "650952627ea3a769baa71ea6556a88df",
-"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1"
+"favicon.png": "f45c2be9e5ac7660144d8da9a86fd81a",
+"index.html": "2af38710b3a952f1e8deaa87ae265b16",
+"/": "2af38710b3a952f1e8deaa87ae265b16",
+"manifest.json": "3b312d064c4588e88a54e5f20472ebec",
+"icons/Icon-512.png": "1658cd6a73410e79e1156896ce712d31",
+"icons/Icon-192.png": "6f20f11a22e3833e60670d5990d6a98c"
 };
 
 // The application shell files that are downloaded before a service worker can
