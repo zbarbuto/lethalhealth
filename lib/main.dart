@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:lethal_health/health_mode.dart';
 import 'package:lethal_health/player.dart';
 import 'package:lethal_health/player_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -253,12 +254,19 @@ class _CenterContentState extends State<CenterContent>
           children: [
             RotationTransition(
               turns: turnsTween.animate(_controller),
-              child: SizedBox(
-                width: 150,
-                height: 250,
-                child: Align(
-                    alignment: Alignment.topRight,
-                    child: Icon(Icons.arrow_upward, size: 150)),
+              child: Visibility(
+                visible: widget.players
+                    .map((element) => element.editHealthMode)
+                    .reduce(
+                      (value, element) => !value && !element,
+                    ),
+                child: SizedBox(
+                  width: 100,
+                  height: 160,
+                  child: Align(
+                      alignment: Alignment.topRight,
+                      child: Icon(Icons.arrow_upward, size: 100)),
+                ),
               ),
             ),
             RaisedButton(
