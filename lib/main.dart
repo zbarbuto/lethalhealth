@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawerEdgeDragWidth: 0,
       drawer: Transform.rotate(
-        angle: players.indexOf(contextPlayer) == 0 ? pi : 0,
+        angle: _faceCurrentPlayer(),
         child: Drawer(
           child: ListView(
             // Important: Remove any padding from the ListView.
@@ -77,19 +77,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   final result = Random().nextBool();
                   showDialog(
                     context: context,
-                    child: AlertDialog(
-                      content: SingleChildScrollView(
-                        child: Text(result ? 'Heads' : 'Tails'),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: const Text('Done'),
-                          onPressed: () {
-                            setState(() {});
-                            Navigator.of(context).pop();
-                          },
+                    child: Transform.rotate(
+                      angle: _faceCurrentPlayer(),
+                      child: AlertDialog(
+                        content: SingleChildScrollView(
+                          child: Text(result ? 'Heads' : 'Tails'),
                         ),
-                      ],
+                        actions: <Widget>[
+                          FlatButton(
+                            child: const Text('Done'),
+                            onPressed: () {
+                              setState(() {});
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -100,30 +103,33 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                   showDialog(
                     context: context,
-                    child: AlertDialog(
-                      title: const Text('Pick a color!'),
-                      content: SingleChildScrollView(
-                        child: ColorPicker(
-                          pickerColor: Colors.red,
-                          onColorChanged: (color) {
-                            setState(() {
-                              contextPlayer.color = color;
-                            });
-                            _storePlayerSettings(contextPlayer);
-                          },
-                          showLabel: true,
-                          pickerAreaHeightPercent: 0.8,
+                    child: Transform.rotate(
+                      angle: _faceCurrentPlayer(),
+                      child: AlertDialog(
+                        title: const Text('Pick a color!'),
+                        content: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: Colors.red,
+                            onColorChanged: (color) {
+                              setState(() {
+                                contextPlayer.color = color;
+                              });
+                              _storePlayerSettings(contextPlayer);
+                            },
+                            showLabel: true,
+                            pickerAreaHeightPercent: 0.8,
+                          ),
                         ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: const Text('Done'),
+                            onPressed: () {
+                              setState(() {});
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: const Text('Done'),
-                          onPressed: () {
-                            setState(() {});
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
                     ),
                   );
                 },
@@ -134,28 +140,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                   showDialog(
                     context: context,
-                    child: AlertDialog(
-                      title: const Text('Enter Start Health'),
-                      content: TextField(
-                        controller: startHealthController,
-                        decoration: InputDecoration(
-                            border: InputBorder.none, hintText: 'Enter health'),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: const Text('Done'),
-                          onPressed: () {
-                            setState(() {
-                              _storePlayerStartHealth(int.parse(
-                                  startHealthController.text, onError: (_) {
-                                startHealthController.text = '30';
-                                return 30;
-                              }));
-                            });
-                            Navigator.of(context).pop();
-                          },
+                    child: Transform.rotate(
+                      angle: _faceCurrentPlayer(),
+                      child: AlertDialog(
+                        title: const Text('Enter Start Health'),
+                        content: TextField(
+                          controller: startHealthController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Enter health'),
                         ),
-                      ],
+                        actions: <Widget>[
+                          FlatButton(
+                            child: const Text('Done'),
+                            onPressed: () {
+                              setState(() {
+                                _storePlayerStartHealth(int.parse(
+                                    startHealthController.text, onError: (_) {
+                                  startHealthController.text = '30';
+                                  return 30;
+                                }));
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -220,6 +230,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() {});
     });
+  }
+
+  _faceCurrentPlayer() {
+    return players.indexOf(contextPlayer) == 0 ? pi : 0;
   }
 
   _updatePlayers() {
