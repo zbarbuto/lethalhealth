@@ -312,12 +312,12 @@ class _CenterContentState extends State<CenterContent>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            RotationTransition(
-              turns: turnsTween.animate(_controller),
-              child: Visibility(
+        RotationTransition(
+          turns: turnsTween.animate(_controller),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Visibility(
                 visible: widget.players
                     .map((element) => element.editHealthMode)
                     .reduce(
@@ -327,24 +327,24 @@ class _CenterContentState extends State<CenterContent>
                   width: 100,
                   height: 200,
                   child: Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(Icons.arrow_drop_up, size: 100)),
+                      alignment: Alignment.bottomLeft,
+                      child: Icon(Icons.arrow_drop_down, size: 100)),
                 ),
               ),
-            ),
-            RaisedButton(
-                onPressed: () {
-                  widget.onTurn();
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 18.0),
-                  child: Text(
-                    'Turn',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                )),
-          ],
+              RaisedButton(
+                  onPressed: () {
+                    widget.onTurn();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 18.0),
+                    child: Text(
+                      'Turn',
+                      style: TextStyle(fontSize: 28),
+                    ),
+                  )),
+            ],
+          ),
         )
       ],
     );
