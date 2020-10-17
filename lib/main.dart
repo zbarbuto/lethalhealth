@@ -45,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Player contextPlayer;
   Player turnPlayer;
+  TextEditingController startHealthController =
+      TextEditingController(text: '30');
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               ListTile(
-                title: Text('Reset all health'),
+                title: Text('Reset Health'),
                 onTap: () {
                   setState(() {
                     players.forEach((element) {
@@ -126,6 +128,38 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+              ListTile(
+                title: Text('Set Starting Health Color'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      title: const Text('Enter Start Health'),
+                      content: TextField(
+                        controller: startHealthController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none, hintText: 'Enter health'),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: const Text('Done'),
+                          onPressed: () {
+                            setState(() {
+                              _storePlayerStartHealth(int.parse(
+                                  startHealthController.text, onError: (_) {
+                                startHealthController.text = '30';
+                                return 30;
+                              }));
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -180,6 +214,8 @@ class _MyHomePageState extends State<MyHomePage> {
         var colorString = prefs.getString('player${i}color') ??
             players[i].color.value.toRadixString(16);
         players[i].color = HexColor(colorString);
+        players[i].startHealth = prefs.getInt('playerStartHealth') ?? 30;
+        players[i].health = players[0].startHealth;
       }
 
       setState(() {});
@@ -197,6 +233,16 @@ class _MyHomePageState extends State<MyHomePage> {
     _prefs.then((SharedPreferences prefs) {
       prefs.setString(
           'player${index}color', player.color.value.toRadixString(16));
+    });
+  }
+
+  _storePlayerStartHealth(int health) {
+    players.forEach((element) {
+      element.startHealth = health;
+      element.health = element.startHealth;
+    });
+    _prefs.then((SharedPreferences prefs) {
+      prefs.setInt('playerStartHealth', health);
     });
   }
 }
