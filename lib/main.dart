@@ -50,81 +50,84 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawerEdgeDragWidth: 0,
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            ListTile(
-              title: Text('Reset all health'),
-              onTap: () {
-                setState(() {
-                  players.forEach((element) {
-                    element.health = element.startHealth;
+      drawer: Transform.rotate(
+        angle: players.indexOf(contextPlayer) == 0 ? pi : 0,
+        child: Drawer(
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              ListTile(
+                title: Text('Reset all health'),
+                onTap: () {
+                  setState(() {
+                    players.forEach((element) {
+                      element.health = element.startHealth;
+                    });
                   });
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: Text('Flip a Coin'),
-              onTap: () {
-                Navigator.of(context).pop();
-                final result = Random().nextBool();
-                showDialog(
-                  context: context,
-                  child: AlertDialog(
-                    content: SingleChildScrollView(
-                      child: Text(result ? 'Heads' : 'Tails'),
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('Flip a Coin'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  final result = Random().nextBool();
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      content: SingleChildScrollView(
+                        child: Text(result ? 'Heads' : 'Tails'),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: const Text('Done'),
+                          onPressed: () {
+                            setState(() {});
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: const Text('Done'),
-                        onPressed: () {
-                          setState(() {});
-                          Navigator.of(context).pop();
-                        },
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Select Color'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      title: const Text('Pick a color!'),
+                      content: SingleChildScrollView(
+                        child: ColorPicker(
+                          pickerColor: Colors.red,
+                          onColorChanged: (color) {
+                            setState(() {
+                              contextPlayer.color = color;
+                            });
+                            _storePlayerSettings(contextPlayer);
+                          },
+                          showLabel: true,
+                          pickerAreaHeightPercent: 0.8,
+                        ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Select Color'),
-              onTap: () {
-                Navigator.of(context).pop();
-                showDialog(
-                  context: context,
-                  child: AlertDialog(
-                    title: const Text('Pick a color!'),
-                    content: SingleChildScrollView(
-                      child: ColorPicker(
-                        pickerColor: Colors.red,
-                        onColorChanged: (color) {
-                          setState(() {
-                            contextPlayer.color = color;
-                          });
-                          _storePlayerSettings(contextPlayer);
-                        },
-                        showLabel: true,
-                        pickerAreaHeightPercent: 0.8,
-                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: const Text('Done'),
+                          onPressed: () {
+                            setState(() {});
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: const Text('Done'),
-                        onPressed: () {
-                          setState(() {});
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Builder(
