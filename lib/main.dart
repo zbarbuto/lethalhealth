@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               ListTile(
-                title: Text('Set Starting Health Color'),
+                title: Text('Set Starting Health'),
                 onTap: () {
                   Navigator.of(context).pop();
                   showDialog(
@@ -225,8 +225,10 @@ class _MyHomePageState extends State<MyHomePage> {
             players[i].color.value.toRadixString(16);
         players[i].color = HexColor(colorString);
         players[i].startHealth = prefs.getInt('playerStartHealth') ?? 30;
-        players[i].health = players[0].startHealth;
+        players[i].health = players[i].startHealth;
       }
+
+      startHealthController.text = players[0].startHealth.toString();
 
       setState(() {});
     });
@@ -274,9 +276,9 @@ class HexColor extends Color {
 }
 
 class CenterContent extends StatefulWidget {
-  List<Player> players;
-  Player turnPlayer;
-  Function onTurn;
+  final List<Player> players;
+  final Player turnPlayer;
+  final Function onTurn;
 
   CenterContent({this.players, this.turnPlayer, this.onTurn});
 
