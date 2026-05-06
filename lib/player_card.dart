@@ -13,11 +13,12 @@ class PlayerCard extends StatelessWidget {
   final Function onSettings;
   final bool inverted;
 
-  PlayerCard(
-      {this.player,
-      this.updatePlayers,
-      this.onSettings,
-      this.inverted = false});
+  PlayerCard({
+    required this.player,
+    required this.updatePlayers,
+    required this.onSettings,
+    this.inverted = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,8 @@ class PlayerCard extends StatelessWidget {
               updatePlayers();
             },
             health: player.health,
-            color: player.color)
+            color: player.color,
+          )
         : HealthManager(
             onSettings: onSettings,
             onHealth: (HealthMode mode) {
@@ -47,12 +49,15 @@ class PlayerCard extends StatelessWidget {
             health: player.health,
           );
     return Expanded(
-        child: Container(
-      color: player.color,
-      child: Padding(
+      child: Container(
+        color: player.color,
+        child: Padding(
           padding: EdgeInsets.all(24),
-          child:
-              inverted ? Transform.rotate(angle: pi, child: content) : content),
-    ));
+          child: inverted
+              ? Transform.rotate(angle: pi, child: content)
+              : content,
+        ),
+      ),
+    );
   }
 }

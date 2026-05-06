@@ -3,10 +3,14 @@ import 'package:lethal_health/player.dart';
 
 class CenterContent extends StatefulWidget {
   final List<Player> players;
-  final Player turnPlayer;
+  final Player? turnPlayer;
   final Function onTurn;
 
-  CenterContent({this.players, this.turnPlayer, this.onTurn});
+  CenterContent({
+    required this.players,
+    required this.turnPlayer,
+    required this.onTurn,
+  });
 
   @override
   _CenterContentState createState() => _CenterContentState();
@@ -14,23 +18,24 @@ class CenterContent extends StatefulWidget {
 
 class _CenterContentState extends State<CenterContent>
     with SingleTickerProviderStateMixin {
-  final Tween<double> turnsTween = Tween<double>(
-    begin: 0,
-    end: 0.5,
-  );
+  final Tween<double> turnsTween = Tween<double>(begin: 0, end: 0.5);
 
-  AnimationController _controller;
+  late AnimationController _controller;
 
-  initState() {
+  @override
+  void initState() {
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
     super.initState();
   }
 
   @override
   void didUpdateWidget(CenterContent oldWidget) {
+    if (widget.turnPlayer == null) return;
     super.didUpdateWidget(oldWidget);
-    widget.players.indexOf(widget.turnPlayer) == 0
+    widget.players.indexOf(widget.turnPlayer!) == 0
         ? _controller.forward()
         : _controller.reverse();
   }
@@ -48,32 +53,31 @@ class _CenterContentState extends State<CenterContent>
               Visibility(
                 visible: widget.players
                     .map((element) => element.editHealthMode)
-                    .reduce(
-                      (value, element) => !value && !element,
-                    ),
+                    .reduce((value, element) => !value && !element),
                 child: SizedBox(
                   width: 100,
                   height: 200,
                   child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(Icons.arrow_drop_down, size: 100)),
+                    alignment: Alignment.bottomLeft,
+                    child: Icon(Icons.arrow_drop_down, size: 100),
+                  ),
                 ),
               ),
-              RaisedButton(
-                  onPressed: () {
-                    widget.onTurn();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8, horizontal: 18.0),
-                    child: Text(
-                      'Turn',
-                      style: TextStyle(fontSize: 28),
-                    ),
-                  )),
+              ElevatedButton(
+                onPressed: () {
+                  widget.onTurn();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 18.0,
+                  ),
+                  child: Text('Pass Turn', style: TextStyle(fontSize: 28)),
+                ),
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

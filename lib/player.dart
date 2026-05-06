@@ -13,5 +13,6 @@ class Player {
     return healthMode != HealthMode.none;
   }
 
-  Player({this.color, this.startHealth = 30}) : this.health = startHealth;
+  Player({required this.color, this.startHealth = 30})
+    : this.health = startHealth;
 }

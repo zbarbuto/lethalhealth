@@ -9,13 +9,14 @@ class HealthManager extends StatelessWidget {
   final Function onCoin;
   final Function onSettings;
 
-  HealthManager(
-      {this.health = 0,
-      this.hasCoin,
-      this.color = Colors.cyan,
-      this.onHealth,
-      this.onSettings,
-      this.onCoin});
+  HealthManager({
+    this.health = 0,
+    required this.hasCoin,
+    this.color = Colors.cyan,
+    required this.onHealth,
+    required this.onSettings,
+    required this.onCoin,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class HealthManager extends StatelessWidget {
                         style: TextStyle(fontSize: 42),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -68,10 +69,12 @@ class HealthManager extends StatelessWidget {
                   onHealth(HealthMode.subtract);
                 },
                 backgroundColor: Colors.red.shade900,
+                foregroundColor: Colors.white,
                 child: Icon(Icons.remove),
               ),
               FloatingActionButton(
                 backgroundColor: Colors.blueGrey.shade300,
+                foregroundColor: Colors.white,
                 child: Icon(Icons.settings),
                 onPressed: () {
                   onSettings();
@@ -82,10 +85,11 @@ class HealthManager extends StatelessWidget {
                   onHealth(HealthMode.add);
                 },
                 backgroundColor: Colors.green.shade400,
+                foregroundColor: Colors.white,
                 child: Icon(Icons.add),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

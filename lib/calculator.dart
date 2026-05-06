@@ -7,7 +7,11 @@ class Calculator extends StatefulWidget {
   final int health;
   final Function onHealth;
 
-  Calculator({this.color, this.health, this.onHealth});
+  Calculator({
+    required this.color,
+    required this.health,
+    required this.onHealth,
+  });
 
   @override
   _CalculatorState createState() => _CalculatorState();
@@ -27,19 +31,68 @@ class _CalculatorState extends State<Calculator> {
         children: [
           Flexible(
             child: GridView.count(
-                childAspectRatio: 2.8,
-                crossAxisCount: 3,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 0,
-                children: [
-                  ...Keypad.values
-                      .map((Keypad key) => RaisedButton(
-                          onPressed: () {
-                            _handleKey(key);
-                          },
-                          child: Text(key.toKeyLabel())))
-                      .toList()
-                ]),
+              childAspectRatio: 3.8,
+              crossAxisCount: 3,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    widget.onHealth(1);
+                  },
+                  child: Text('1'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.black),
+                    foregroundColor: WidgetStatePropertyAll(Colors.amber),
+                    textStyle: WidgetStatePropertyAll(
+                      TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    widget.onHealth(5);
+                  },
+                  child: Text('5'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.black),
+                    foregroundColor: WidgetStatePropertyAll(Colors.amber),
+                    textStyle: WidgetStatePropertyAll(
+                      TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    widget.onHealth(10);
+                  },
+                  child: Text('10'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.black),
+                    foregroundColor: WidgetStatePropertyAll(Colors.amber),
+                    textStyle: WidgetStatePropertyAll(
+                      TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                ...Keypad.values
+                    .map(
+                      (Keypad key) => ElevatedButton(
+                        onPressed: () {
+                          _handleKey(key);
+                        },
+                        child: Text(key.toKeyLabel()),
+                      ),
+                    )
+                    .toList(),
+              ],
+            ),
           ),
           Container(
             child: Center(
@@ -49,7 +102,7 @@ class _CalculatorState extends State<Calculator> {
                 textAlign: TextAlign.center,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -60,9 +113,11 @@ class _CalculatorState extends State<Calculator> {
       if (key == Keypad.okay) {
         return _setValue();
       } else if (key == Keypad.del) {
-        value = int.parse(
-            value.toString().substring(0, value.toString().length - 1),
-            onError: (_) => 0);
+        value =
+            int.tryParse(
+              value.toString().substring(0, value.toString().length - 1),
+            ) ??
+            0;
         return;
       } else if (value == 0) {
         value = key.toInt();

@@ -29,7 +29,7 @@ class LethalHealth extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -42,13 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Player> players = [
     Player(color: Colors.lightBlue.shade300),
-    Player(color: Colors.red.shade200)
+    Player(color: Colors.red.shade200),
   ];
 
-  Player contextPlayer;
-  Player turnPlayer;
-  TextEditingController startHealthController =
-      TextEditingController(text: '30');
+  late Player contextPlayer = players[0];
+  late Player turnPlayer = players[0];
+  TextEditingController startHealthController = TextEditingController(
+    text: '30',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                   final result = Random().nextBool();
                   showDialog(
-                    context: context,
-                    child: Transform.rotate(
+                    builder: (context) => Transform.rotate(
                       angle: _faceCurrentPlayer(),
                       child: AlertDialog(
                         content: SingleChildScrollView(
                           child: Text(result ? 'Heads' : 'Tails'),
                         ),
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('Done'),
                             onPressed: () {
                               setState(() {});
@@ -96,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
+                    context: context,
                   );
                 },
               ),
@@ -104,8 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   Navigator.of(context).pop();
                   showDialog(
-                    context: context,
-                    child: Transform.rotate(
+                    builder: (context) => Transform.rotate(
                       angle: _faceCurrentPlayer(),
                       child: AlertDialog(
                         title: const Text('Pick a color!'),
@@ -118,12 +118,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               });
                               _storePlayerSettings(contextPlayer);
                             },
-                            showLabel: true,
+                            labelTypes: [],
                             pickerAreaHeightPercent: 0.8,
                           ),
                         ),
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('Done'),
                             onPressed: () {
                               setState(() {});
@@ -133,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
+                    context: context,
                   );
                 },
               ),
@@ -141,27 +142,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   Navigator.of(context).pop();
                   showDialog(
-                    context: context,
-                    child: Transform.rotate(
+                    builder: (context) => Transform.rotate(
                       angle: _faceCurrentPlayer(),
                       child: AlertDialog(
                         title: const Text('Enter Start Health'),
                         content: TextField(
                           controller: startHealthController,
                           decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Enter health'),
+                            border: InputBorder.none,
+                            hintText: 'Enter health',
+                          ),
                         ),
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('Done'),
                             onPressed: () {
                               setState(() {
-                                _storePlayerStartHealth(int.parse(
-                                    startHealthController.text, onError: (_) {
-                                  startHealthController.text = '30';
-                                  return 30;
-                                }));
+                                int health =
+                                    int.tryParse(startHealthController.text) ??
+                                    30;
+
+                                startHealthController.text = health.toString();
+                                _storePlayerStartHealth(health);
                               });
                               Navigator.of(context).pop();
                             },
@@ -169,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
+                    context: context,
                   );
                 },
               ),
@@ -181,19 +184,22 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Center(
               child: Column(
-                  children: players
-                      .map((player) => PlayerCard(
-                            onSettings: () {
-                              setState(() {
-                                contextPlayer = player;
-                              });
-                              Scaffold.of(context).openDrawer();
-                            },
-                            inverted: players.indexOf(player) == 0,
-                            player: player,
-                            updatePlayers: _updatePlayers,
-                          ))
-                      .toList()),
+                children: players
+                    .map(
+                      (player) => PlayerCard(
+                        onSettings: () {
+                          setState(() {
+                            contextPlayer = player;
+                          });
+                          Scaffold.of(context).openDrawer();
+                        },
+                        inverted: players.indexOf(player) == 0,
+                        player: player,
+                        updatePlayers: _updatePlayers,
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
             Center(
               child: CenterContent(
@@ -211,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 players: players,
                 turnPlayer: turnPlayer,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -223,8 +229,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _prefs.then((prefs) {
       for (var i = 0; i < players.length; i++) {
-        var colorString = prefs.getString('player${i}color') ??
-            players[i].color.value.toRadixString(16);
+        var colorString =
+            prefs.getString('player${i}color') ??
+            players[i].color.toARGB32().toRadixString(16);
         players[i].color = HexColor(colorString);
         players[i].startHealth = prefs.getInt('playerStartHealth') ?? 30;
         players[i].health = players[i].startHealth;
@@ -236,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _faceCurrentPlayer() {
+  double _faceCurrentPlayer() {
     return players.indexOf(contextPlayer) == 0 ? pi : 0;
   }
 
@@ -250,7 +257,9 @@ class _MyHomePageState extends State<MyHomePage> {
     int index = players.indexOf(player);
     _prefs.then((SharedPreferences prefs) {
       prefs.setString(
-          'player${index}color', player.color.value.toRadixString(16));
+        'player${index}color',
+        player.color.toARGB32().toRadixString(16),
+      );
     });
   }
 
